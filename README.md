@@ -2,7 +2,7 @@
 
 ![X (formerly Twitter) Follow](https://img.shields.io/twitter/follow/dove_zachary?label=Chocoford) ![GitHub License](https://img.shields.io/github/license/chocoford/SwiftyAlert)
 
-`SwiftyAlert` is a lightweight, multiplatform, easy-to-use `swiftUI` package that for errors handling.
+`SwiftyAlert` is a lightweight, multiplatform, easy-to-use `swiftUI` package that for errors handling. Integrated with `SwiftUI Environment`.
 
 ## Platforms
 
