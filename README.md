@@ -29,7 +29,7 @@ Or in a Swift Package, add it to the Package.swift dependencies:
 let package = Package(
     ...
     dependencies: [
-        .package(url: "https://github.com/chocoford/SwiftyAlert.git", branch: "main")
+        .package(url: "https://github.com/chocoford/SwiftyAlert.git", from: "1.0.0"),
     ],
     targets: [
         .target(
