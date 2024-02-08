@@ -80,7 +80,7 @@ struct ContentView: View {
   @Environment(\.alert) private var alert // <-- use with @Environment
   
   var body: some View {
-				Button {
+	Button {
           alert(title: "Alert") {
               Button {
                   ...
@@ -91,7 +91,7 @@ struct ContentView: View {
           
           // or just use with error
           do {...} catch {
-						alert(error)
+             alert(error)
           }
           
         } label: {
@@ -115,7 +115,7 @@ struct ContentView: View {
   @Environment(\.alertToast) private var alertToast
 
   var body: some View {
-		Button {
+    Button {
       do {...} catch {
         alertToast(error) 
       }
