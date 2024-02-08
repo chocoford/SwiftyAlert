@@ -87,7 +87,13 @@ struct ContentView: View {
               } label: {
                   Text("Alert action")
               }
+          } message: {}
+          
+          // or just use with error
+          do {...} catch {
+						alert(error)
           }
+          
         } label: {
           Text("Alert")
         }
@@ -99,7 +105,7 @@ struct ContentView: View {
 
 #### Use with AlertToast
 
-Also if your project has imported [`AlertToast`](https://github.com/elai950/AlertToast.git), you can use alertToast in the same way!
+Also if your project has imported [`AlertToast`](https://github.com/elai950/AlertToast.git), you can use `alertToast` in the same way!
 
 ```swift
 import AlertToast
