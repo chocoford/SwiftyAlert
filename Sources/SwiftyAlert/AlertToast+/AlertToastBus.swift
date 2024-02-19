@@ -10,8 +10,19 @@ import SwiftUI
 #if canImport(AlertToast)
 import AlertToast
 
+#else
+
+struct FakeAlertToast {
+    init() {}
+}
+
+public typealias AlertToast = FakeAlertToast
+
+#endif
+
 // 1. Create the key with a default value
 private struct AlertToastActionKey: EnvironmentKey {
+#if canImport(AlertToast)
     static let defaultValue: AlertToastAction = AlertToastAction(
         isPresented: .constant(false),
         alertToast: .constant(AlertToast(displayMode: .hud, type: .error(.red))),
@@ -21,8 +32,12 @@ private struct AlertToastActionKey: EnvironmentKey {
         onTap: .constant(nil),
         onCompletion: .constant(nil)
     )
+#else
+    static let defaultValue: AlertToastAction = AlertToastAction()
+#endif
 }
 
+#if canImport(AlertToast)
 public struct AlertToastAction {
     @Binding var isPresented: Bool
     @Binding var alertToast: AlertToast
@@ -90,6 +105,11 @@ public struct AlertToastAction {
         self.onCompletion = completion
     }
 }
+#else
+public struct AlertToastAction {
+    func callAsFunction() {}
+}
+#endif
 
 // 2. Extend the environment with our property
 extension EnvironmentValues {
@@ -99,6 +119,7 @@ extension EnvironmentValues {
     }
 }
 
+#if canImport(AlertToast)
 struct AlertToastViewModifier: ViewModifier {
     @State private var isPresented: Bool = false
     @State private var alertToast: AlertToast = .init(type: .error(.red))
@@ -136,8 +157,8 @@ struct AlertToastViewModifier: ViewModifier {
             )
     }
 }
-
 #endif
+
 // 3. Optional convenience view modifier
 extension View {
     @ViewBuilder

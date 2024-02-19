@@ -1,6 +1,6 @@
 # Swifty Alert
 
-[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fchocoford%2FSwiftyAlert%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/chocoford/SwiftyAlert)[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fchocoford%2FSwiftyAlert%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/chocoford/SwiftyAlert)![GitHub License](https://img.shields.io/github/license/chocoford/SwiftyAlert)![X (formerly Twitter) Follow](https://img.shields.io/twitter/follow/dove_zachary?label=Chocoford)
+[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fchocoford%2FSwiftyAlert%2Fbadge%3Ftype%3Dswift-versions) ](https://swiftpackageindex.com/chocoford/SwiftyAlert) [![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fchocoford%2FSwiftyAlert%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/chocoford/SwiftyAlert) ![GitHub License](https://img.shields.io/github/license/chocoford/SwiftyAlert) ![X (formerly Twitter) Follow](https://img.shields.io/twitter/follow/dove_zachary?label=Chocoford)
 
 `SwiftyAlert` is a lightweight, multiplatform, easy-to-use `swiftUI` package that for errors handling. Integrated with `SwiftUI Environment`.
 
