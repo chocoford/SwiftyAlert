@@ -12,7 +12,7 @@ import AlertToast
 
 #else
 
-struct FakeAlertToast {
+public struct FakeAlertToast {
     init() {}
 }
 
