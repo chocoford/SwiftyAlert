@@ -1,6 +1,12 @@
 
 import SwiftUI
 
+public enum SwiftyAlertType {
+    case alert
+    case alertToast
+    case print
+}
+
 public struct SwiftyAlertTypes: OptionSet {
     public var rawValue: Int
     
