@@ -12,6 +12,7 @@ import AlertToast
 
 #else
 
+// This is because Xcode can not recognize #if canImport(AlertToast) when add package from url.
 public struct FakeAlertToast {
     /// Determine how the alert will be display
     public enum DisplayMode: Equatable{
