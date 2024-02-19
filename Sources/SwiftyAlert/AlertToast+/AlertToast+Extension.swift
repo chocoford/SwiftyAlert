@@ -5,9 +5,11 @@
 //  Created by Chocoford on 2023/12/27.
 //
 
-#if canImport(AlertToast)
 import Foundation
+import SwiftUI
+#if canImport(AlertToast)
 import AlertToast
+#endif
 
 extension AlertToast {
     public init(
@@ -26,4 +28,3 @@ extension AlertToast {
         }
     }
 }
-#endif
