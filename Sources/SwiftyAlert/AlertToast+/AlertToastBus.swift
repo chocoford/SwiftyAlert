@@ -123,7 +123,7 @@ extension EnvironmentValues {
 #if canImport(AlertToast)
 struct AlertToastViewModifier: ViewModifier {
     @State private var isPresented: Bool = false
-    @State private var alertToast: AlertToast = .init(type: .error(.red))
+    @State private var alertToast: AlertToast = AlertToast(type: .error(.red))
     @State private var duration: Double = 2
     @State private var tapToDismiss: Bool = true
     @State private var offsetY: CGFloat = 0.0
