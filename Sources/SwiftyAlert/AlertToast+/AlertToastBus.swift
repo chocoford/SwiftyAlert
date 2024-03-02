@@ -76,7 +76,7 @@ public struct AlertToastAction {
     }
     
     public func callAsFunction(_ error: Error) {
-        self.callAsFunction(.init(error: error))
+        self.callAsFunction(AlertToast(error: error))
     }
     
     private func toggleAlertToast(
