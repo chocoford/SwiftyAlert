@@ -16,7 +16,6 @@ public typealias AlertToast = FakeAlertToast
 
 // 1. Create the key with a default value
 private struct AlertToastActionKey: EnvironmentKey {
-//#if canImport(AlertToast)
     static let defaultValue: AlertToastAction = AlertToastAction(
         isPresented: .constant(false),
         alertToast: .constant(AlertToast(displayMode: .hud, type: .error(.red))),
@@ -26,12 +25,8 @@ private struct AlertToastActionKey: EnvironmentKey {
         onTap: .constant(nil),
         onCompletion: .constant(nil)
     )
-//#else
-//    static let defaultValue: AlertToastAction = AlertToastAction()
-//#endif
 }
 
-//#if canImport(AlertToast)
 public struct AlertToastAction {
     @Binding var isPresented: Bool
     @Binding var alertToast: AlertToast
@@ -102,19 +97,6 @@ public struct AlertToastAction {
         self.onCompletion = completion
     }
 }
-//#else
-//public struct AlertToastAction {
-//    public func callAsFunction(
-//        _ alert: AlertToast,
-//        duration: Double = 2,
-//        tapToDismiss: Bool = true,
-//        offsetY: CGFloat = 0,
-//        onTap: (() -> ())? = nil,
-//        completion: (() -> ())? = nil
-//    ) {}
-//    public func callAsFunction(_ error: Error) {}
-//}
-//#endif
 
 // 2. Extend the environment with our property
 extension EnvironmentValues {
