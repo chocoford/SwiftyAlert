@@ -4,6 +4,7 @@
 //
 //  Created by Chocoford on 2023/12/11.
 //
+//  Can not use AlertToast init function like `.init`
 
 import SwiftUI
 
@@ -15,7 +16,6 @@ public typealias AlertToast = FakeAlertToast
 
 // 1. Create the key with a default value
 private struct AlertToastActionKey: EnvironmentKey {
-#if canImport(AlertToast)
     static let defaultValue: AlertToastAction = AlertToastAction(
         isPresented: .constant(false),
         alertToast: .constant(AlertToast(displayMode: .hud, type: .error(.red))),
@@ -25,12 +25,8 @@ private struct AlertToastActionKey: EnvironmentKey {
         onTap: .constant(nil),
         onCompletion: .constant(nil)
     )
-#else
-    static let defaultValue: AlertToastAction = AlertToastAction()
-#endif
 }
 
-#if canImport(AlertToast)
 public struct AlertToastAction {
     @Binding var isPresented: Bool
     @Binding var alertToast: AlertToast
@@ -51,7 +47,9 @@ public struct AlertToastAction {
         completion: (() -> ())? = nil
     ) {
         if self.isPresented {
-            queue.append((alert, duration, tapToDismiss, offsetY, onTap, completion))
+            queue.append(
+                (alert, duration, tapToDismiss, offsetY, onTap, completion)
+            )
             Timer.scheduledTimer(withTimeInterval: 2, repeats: true) { timer in
                 if queue.isEmpty { timer.invalidate(); return }
                 let parms = queue.removeFirst()
@@ -66,7 +64,8 @@ public struct AlertToastAction {
             }
         } else {
             self.toggleAlertToast(
-                alert, duration: duration,
+                alert,
+                duration: duration,
                 tapToDismiss: tapToDismiss,
                 offsetY: offsetY,
                 onTap: onTap,
@@ -76,7 +75,7 @@ public struct AlertToastAction {
     }
     
     public func callAsFunction(_ error: Error) {
-        self.callAsFunction(.init(error: error))
+        self.callAsFunction(AlertToast(error: error))
     }
     
     private func toggleAlertToast(
@@ -98,19 +97,6 @@ public struct AlertToastAction {
         self.onCompletion = completion
     }
 }
-#else
-public struct AlertToastAction {
-    public func callAsFunction(
-        _ alert: AlertToast,
-        duration: Double = 2,
-        tapToDismiss: Bool = true,
-        offsetY: CGFloat = 0,
-        onTap: (() -> ())? = nil,
-        completion: (() -> ())? = nil
-    ) {}
-    public func callAsFunction(_ error: Error) {}
-}
-#endif
 
 // 2. Extend the environment with our property
 extension EnvironmentValues {
@@ -123,7 +109,7 @@ extension EnvironmentValues {
 #if canImport(AlertToast)
 struct AlertToastViewModifier: ViewModifier {
     @State private var isPresented: Bool = false
-    @State private var alertToast: AlertToast = .init(type: .error(.red))
+    @State private var alertToast: AlertToast = AlertToast(type: .error(.red))
     @State private var duration: Double = 2
     @State private var tapToDismiss: Bool = true
     @State private var offsetY: CGFloat = 0.0

@@ -4,6 +4,8 @@
 
 `SwiftyAlert` is a lightweight, multiplatform, easy-to-use `swiftUI` package that for errors handling. Integrated with `SwiftUI Environment`.
 
+
+
 ## Platforms
 
 * macOS 12.0+
@@ -12,6 +14,8 @@
 * tvOS 15.0+
 * watchOS 8.0+
 * visionOS 1.0+
+
+
 
 ## Installation
 
@@ -43,6 +47,8 @@ let package = Package(
     ]
 )
 ```
+
+
 
 ## Usage
 
@@ -125,6 +131,13 @@ struct ContentView: View {
   }
 }
 ```
+
+
+
+## Trouble shooting
+
+* `Undefined symbols:...` 
+  Just `Reset Package Caches` and build again. The problem will be gone.
 
 
 
