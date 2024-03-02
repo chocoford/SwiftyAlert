@@ -4,6 +4,7 @@
 //
 //  Created by Chocoford on 2023/12/11.
 //
+//  Can not use AlertToast init function like `.init`
 
 import SwiftUI
 
@@ -51,7 +52,9 @@ public struct AlertToastAction {
         completion: (() -> ())? = nil
     ) {
         if self.isPresented {
-            queue.append((alert, duration, tapToDismiss, offsetY, onTap, completion))
+            queue.append(
+                (alert, duration, tapToDismiss, offsetY, onTap, completion)
+            )
             Timer.scheduledTimer(withTimeInterval: 2, repeats: true) { timer in
                 if queue.isEmpty { timer.invalidate(); return }
                 let parms = queue.removeFirst()
@@ -66,7 +69,8 @@ public struct AlertToastAction {
             }
         } else {
             self.toggleAlertToast(
-                alert, duration: duration,
+                alert,
+                duration: duration,
                 tapToDismiss: tapToDismiss,
                 offsetY: offsetY,
                 onTap: onTap,

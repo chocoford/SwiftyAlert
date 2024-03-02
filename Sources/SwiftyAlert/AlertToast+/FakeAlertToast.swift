@@ -96,7 +96,7 @@ public struct FakeAlertToast {
         }
     }
     
-    public init() {}
+//    public init() {}
     public init(
         displayMode: DisplayMode = .alert,
         type: AlertType,
