@@ -134,6 +134,22 @@ struct ContentView: View {
 
 
 
+#### Use with AlertToast and `.sheet` or `.fullscreenCover`
+
+You can additionally apply `.swiftyAlert(...)` to make alertToast displayed in `sheet` or `fullscreenCover`.
+
+```swift
+...
+.sheet(isPresented: $showSheet) {
+    SheetView()
+        .swiftyAlert() // <-- inject for sheet view to display alertToast
+}
+```
+
+
+
+
+
 ## Trouble shooting
 
 * `Undefined symbols:...` 
