@@ -120,7 +120,6 @@ struct AlertToastViewModifier: ViewModifier {
     @State var onCompletion: (() -> Void)?
     
     func body(content: Content) -> some View {
-        let _ = Self._printChanges()
         content
             .overlay {
                 Color.clear // <-- otherwise view will be rerendered at the first alert.
