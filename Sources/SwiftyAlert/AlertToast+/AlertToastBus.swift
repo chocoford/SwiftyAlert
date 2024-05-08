@@ -102,7 +102,10 @@ public struct AlertToastAction {
 extension EnvironmentValues {
     public internal(set) var alertToast: AlertToastAction {
         get { self[AlertToastActionKey.self] }
-        set { self[AlertToastActionKey.self] = newValue }
+        set {
+            print("Set AlertToastActionKey")
+            self[AlertToastActionKey.self] = newValue
+        }
     }
 }
 
@@ -117,18 +120,22 @@ struct AlertToastViewModifier: ViewModifier {
     @State var onCompletion: (() -> Void)?
     
     func body(content: Content) -> some View {
+        let _ = Self._printChanges()
         content
-            .toast(
-                isPresenting: $isPresented,
-                duration: duration,
-                tapToDismiss: tapToDismiss,
-                offsetY: offsetY
-            ) {
-                self.alertToast
-            } onTap: {
-                self.onTap?()
-            } completion: {
-                self.onCompletion?()
+            .overlay {
+                Color.clear // <-- otherwise view will be rerendered at the first alert.
+                    .toast(
+                        isPresenting: $isPresented,
+                        duration: duration,
+                        tapToDismiss: tapToDismiss,
+                        offsetY: offsetY
+                    ) {
+                        self.alertToast
+                    } onTap: {
+                        self.onTap?()
+                    } completion: {
+                        self.onCompletion?()
+                    }
             }
             .environment(
                 \.alertToast,
@@ -158,6 +165,9 @@ extension View {
         }
 #else
         self
+            .onAppear {
+                fatalError("AlertToast not detected.")
+            }
 #endif
     }
 }
