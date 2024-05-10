@@ -102,10 +102,7 @@ public struct AlertToastAction {
 extension EnvironmentValues {
     public internal(set) var alertToast: AlertToastAction {
         get { self[AlertToastActionKey.self] }
-        set {
-            print("Set AlertToastActionKey")
-            self[AlertToastActionKey.self] = newValue
-        }
+        set { self[AlertToastActionKey.self] = newValue }
     }
 }
 
