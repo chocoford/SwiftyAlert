@@ -27,7 +27,7 @@ private struct AlertToastActionKey: EnvironmentKey {
     )
 }
 
-public struct AlertToastAction {
+public struct AlertToastAction: Sendable {
     @Binding var isPresented: Bool
     @Binding var alertToast: AlertToast
     @Binding var duration: Double
