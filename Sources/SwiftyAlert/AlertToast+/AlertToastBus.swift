@@ -106,7 +106,21 @@ extension EnvironmentValues {
     }
 }
 
+
 #if canImport(AlertToast)
+extension Notification.Name {
+    public static let alertToast = Notification.Name("AlertToast")
+}
+
+public struct AlertToastPayload {
+    var alertToast: AlertToast = AlertToast(type: .error(.red))
+    var duration: Double = 2
+    var tapToDismiss: Bool = true
+    var offsetY: CGFloat = 0.0
+    var onTap: (() -> Void)?
+    var onCompletion: (() -> Void)?
+}
+
 struct AlertToastViewModifier: ViewModifier {
     @State private var isPresented: Bool = false
     @State private var alertToast: AlertToast = AlertToast(type: .error(.red))
@@ -115,6 +129,8 @@ struct AlertToastViewModifier: ViewModifier {
     @State private var offsetY: CGFloat = 0.0
     @State var onTap: (() -> Void)?
     @State var onCompletion: (() -> Void)?
+    
+    @State private var alertToastAction: AlertToastAction?
     
     func body(content: Content) -> some View {
         content
@@ -135,16 +151,32 @@ struct AlertToastViewModifier: ViewModifier {
             }
             .environment(
                 \.alertToast,
-                 AlertToastAction(
-                    isPresented: $isPresented,
-                    alertToast: $alertToast,
-                    duration: $duration,
-                    tapToDismiss: $tapToDismiss,
-                    offsetY: $offsetY,
-                    onTap: $onTap,
-                    onCompletion: $onCompletion
-                 )
+                 alertToastAction ?? AlertToastActionKey.defaultValue
             )
+            .onAppear {
+                if alertToastAction == nil {
+                    alertToastAction = AlertToastAction(
+                        isPresented: $isPresented,
+                        alertToast: $alertToast,
+                        duration: $duration,
+                        tapToDismiss: $tapToDismiss,
+                        offsetY: $offsetY,
+                        onTap: $onTap,
+                        onCompletion: $onCompletion
+                     )
+                }
+            }
+            .onReceive(NotificationCenter.default.publisher(for: .alertToast)) { output in
+                guard let payload = output.object as? AlertToastPayload else { return }
+                alertToastAction?(
+                    payload.alertToast,
+                    duration: payload.duration,
+                    tapToDismiss: payload.tapToDismiss,
+                    offsetY: payload.offsetY,
+                    onTap: payload.onTap,
+                    completion: payload.onCompletion
+                )
+            }
     }
 }
 #endif

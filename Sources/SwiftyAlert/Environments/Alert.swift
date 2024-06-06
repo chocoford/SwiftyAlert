@@ -52,7 +52,6 @@ public struct AlertAction {
                 Text(error.localizedDescription)
             }
         }
-
     }
     
     private func toggleAlert(
@@ -76,11 +75,37 @@ extension EnvironmentValues {
     }
 }
 
+extension Notification.Name {
+    public static let alert = Notification.Name("Alert")
+}
+
+public struct AlertPayload {
+    var title: LocalizedStringKey = ""
+    var isPresented: Bool = false
+    var actions: AnyView
+    var message: AnyView
+    
+    init<Actions: View, Message: View>(
+        title: LocalizedStringKey,
+        isPresented: Bool,
+        actions: () -> Actions,
+        message: () -> Message
+    ) {
+        self.title = title
+        self.isPresented = isPresented
+        self.actions = AnyView(actions())
+        self.message = AnyView(message())
+    }
+}
+
+
 struct AlertViewModifier: ViewModifier {
     @State private var title: LocalizedStringKey = ""
     @State private var isPresented: Bool = false
     @State private var actions: AnyView = AnyView(EmptyView())
     @State private var message: AnyView = AnyView(EmptyView())
+    
+    @State private var alertAction: AlertAction?
     
     func body(content: Content) -> some View {
         content
@@ -91,13 +116,26 @@ struct AlertViewModifier: ViewModifier {
             }
             .environment(
                 \.alert,
-                 AlertAction(
-                    title: $title,
-                    isPresented: $isPresented,
-                    actions: $actions,
-                    message: $message
-                 )
+                 alertAction ?? AlertActionKey.defaultValue
             )
+            .onReceive(NotificationCenter.default.publisher(for: .alert)) { output in
+                guard let payload = output.object as? AlertPayload else { return }
+                self.alertAction?(title: title) {
+                    actions
+                } message: {
+                    message
+                }
+            }
+            .onAppear {
+                if alertAction == nil {
+                    self.alertAction = AlertAction(
+                       title: $title,
+                       isPresented: $isPresented,
+                       actions: $actions,
+                       message: $message
+                    )
+                }
+            }
     }
 }
 
