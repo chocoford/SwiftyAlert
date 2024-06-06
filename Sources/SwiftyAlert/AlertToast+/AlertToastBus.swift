@@ -194,7 +194,7 @@ extension Notification.Name {
 }
 
 internal struct AlertToastPayload {
-    var alertToast: AlertToast = AlertToast(type: .error(.red))
+    var alertToast: AlertToast
     var duration: Double = 2
     var tapToDismiss: Bool = true
     var offsetY: CGFloat = 0.0
@@ -203,12 +203,12 @@ internal struct AlertToastPayload {
 }
 
 public func alertToast(
-    alertToast: AlertToast = AlertToast(type: .error(.red)),
+    alertToast: AlertToast,
     duration: Double = 2,
     tapToDismiss: Bool = true,
     offsetY: CGFloat = 0.0,
-    onTap: (() -> Void)?,
-    onCompletion: (() -> Void)?
+    onTap: (() -> Void)? = nil,
+    onCompletion: (() -> Void)? = nil
 ) {
     NotificationCenter.default.post(
         name: .alertToast,
