@@ -75,38 +75,15 @@ extension EnvironmentValues {
     }
 }
 
-extension Notification.Name {
-    public static let alert = Notification.Name("Alert")
-}
-
-public struct AlertPayload {
-    var title: LocalizedStringKey = ""
-    var isPresented: Bool = false
-    var actions: AnyView
-    var message: AnyView
-    
-    init<Actions: View, Message: View>(
-        title: LocalizedStringKey,
-        isPresented: Bool,
-        actions: () -> Actions,
-        message: () -> Message
-    ) {
-        self.title = title
-        self.isPresented = isPresented
-        self.actions = AnyView(actions())
-        self.message = AnyView(message())
-    }
-}
-
 
 struct AlertViewModifier: ViewModifier {
     @State private var title: LocalizedStringKey = ""
     @State private var isPresented: Bool = false
     @State private var actions: AnyView = AnyView(EmptyView())
     @State private var message: AnyView = AnyView(EmptyView())
-    
+
     @State private var alertAction: AlertAction?
-    
+
     func body(content: Content) -> some View {
         content
             .alert(title, isPresented: $isPresented) {
@@ -120,10 +97,10 @@ struct AlertViewModifier: ViewModifier {
             )
             .onReceive(NotificationCenter.default.publisher(for: .alert)) { output in
                 guard let payload = output.object as? AlertPayload else { return }
-                self.alertAction?(title: title) {
-                    actions
+                self.alertAction?(title: payload.title) {
+                    payload.actions
                 } message: {
-                    message
+                    payload.message
                 }
             }
             .onAppear {
@@ -149,4 +126,42 @@ extension View {
             self
         }
     }
+}
+
+
+
+extension Notification.Name {
+    internal static let alert = Notification.Name("Alert")
+}
+
+internal struct AlertPayload {
+    var title: LocalizedStringKey = ""
+    var actions: AnyView
+    var message: AnyView
+    
+    init<Actions: View, Message: View>(
+        title: LocalizedStringKey,
+        @ViewBuilder actions: () -> Actions,
+        @ViewBuilder message: () -> Message
+    ) {
+        self.title = title
+        self.actions = AnyView(actions())
+        self.message = AnyView(message())
+    }
+}
+
+
+public func alert<Actions: View, Message: View>(
+    title: LocalizedStringKey,
+    @ViewBuilder actions: () -> Actions,
+    @ViewBuilder message: () -> Message
+) {
+    NotificationCenter.default.post(
+        name: .alert,
+        object: AlertPayload(
+            title: title,
+            actions: actions,
+            message: message
+        )
+    )
 }

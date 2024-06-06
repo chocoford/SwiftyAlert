@@ -108,19 +108,6 @@ extension EnvironmentValues {
 
 
 #if canImport(AlertToast)
-extension Notification.Name {
-    public static let alertToast = Notification.Name("AlertToast")
-}
-
-public struct AlertToastPayload {
-    var alertToast: AlertToast = AlertToast(type: .error(.red))
-    var duration: Double = 2
-    var tapToDismiss: Bool = true
-    var offsetY: CGFloat = 0.0
-    var onTap: (() -> Void)?
-    var onCompletion: (() -> Void)?
-}
-
 struct AlertToastViewModifier: ViewModifier {
     @State private var isPresented: Bool = false
     @State private var alertToast: AlertToast = AlertToast(type: .error(.red))
@@ -199,3 +186,40 @@ extension View {
 #endif
     }
 }
+
+
+#if canImport(AlertToast)
+extension Notification.Name {
+    internal static let alertToast = Notification.Name("AlertToast")
+}
+
+internal struct AlertToastPayload {
+    var alertToast: AlertToast = AlertToast(type: .error(.red))
+    var duration: Double = 2
+    var tapToDismiss: Bool = true
+    var offsetY: CGFloat = 0.0
+    var onTap: (() -> Void)?
+    var onCompletion: (() -> Void)?
+}
+
+public func alertToast(
+    alertToast: AlertToast = AlertToast(type: .error(.red)),
+    duration: Double = 2,
+    tapToDismiss: Bool = true,
+    offsetY: CGFloat = 0.0,
+    onTap: (() -> Void)?,
+    onCompletion: (() -> Void)?
+) {
+    NotificationCenter.default.post(
+        name: .alertToast,
+        object: AlertToastPayload(
+            alertToast: alertToast,
+            duration: duration,
+            tapToDismiss: tapToDismiss,
+            offsetY: offsetY,
+            onTap: onTap,
+            onCompletion: onCompletion
+        )
+    )
+}
+#endif
