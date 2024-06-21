@@ -188,7 +188,6 @@ extension View {
 }
 
 
-#if canImport(AlertToast)
 extension Notification.Name {
     internal static let alertToast = Notification.Name("AlertToast")
 }
@@ -222,4 +221,3 @@ public func alertToast(
         )
     )
 }
-#endif
