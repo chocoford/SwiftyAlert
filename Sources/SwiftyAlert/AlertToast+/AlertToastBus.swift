@@ -27,7 +27,7 @@ private struct AlertToastActionKey: EnvironmentKey {
     )
 }
 
-public struct AlertToastAction {
+public struct AlertToastAction: Sendable {
     @Binding var isPresented: Bool
     @Binding var alertToast: AlertToast
     @Binding var duration: Double
@@ -106,6 +106,7 @@ extension EnvironmentValues {
     }
 }
 
+
 #if canImport(AlertToast)
 struct AlertToastViewModifier: ViewModifier {
     @State private var isPresented: Bool = false
@@ -115,6 +116,8 @@ struct AlertToastViewModifier: ViewModifier {
     @State private var offsetY: CGFloat = 0.0
     @State var onTap: (() -> Void)?
     @State var onCompletion: (() -> Void)?
+    
+    @State private var alertToastAction: AlertToastAction?
     
     func body(content: Content) -> some View {
         content
@@ -135,16 +138,32 @@ struct AlertToastViewModifier: ViewModifier {
             }
             .environment(
                 \.alertToast,
-                 AlertToastAction(
-                    isPresented: $isPresented,
-                    alertToast: $alertToast,
-                    duration: $duration,
-                    tapToDismiss: $tapToDismiss,
-                    offsetY: $offsetY,
-                    onTap: $onTap,
-                    onCompletion: $onCompletion
-                 )
+                 alertToastAction ?? AlertToastActionKey.defaultValue
             )
+            .onAppear {
+                if alertToastAction == nil {
+                    alertToastAction = AlertToastAction(
+                        isPresented: $isPresented,
+                        alertToast: $alertToast,
+                        duration: $duration,
+                        tapToDismiss: $tapToDismiss,
+                        offsetY: $offsetY,
+                        onTap: $onTap,
+                        onCompletion: $onCompletion
+                     )
+                }
+            }
+            .onReceive(NotificationCenter.default.publisher(for: .alertToast)) { output in
+                guard let payload = output.object as? AlertToastPayload else { return }
+                alertToastAction?(
+                    payload.alertToast,
+                    duration: payload.duration,
+                    tapToDismiss: payload.tapToDismiss,
+                    offsetY: payload.offsetY,
+                    onTap: payload.onTap,
+                    completion: payload.onCompletion
+                )
+            }
     }
 }
 #endif
@@ -166,4 +185,39 @@ extension View {
             }
 #endif
     }
+}
+
+
+extension Notification.Name {
+    internal static let alertToast = Notification.Name("AlertToast")
+}
+
+internal struct AlertToastPayload {
+    var alertToast: AlertToast
+    var duration: Double = 2
+    var tapToDismiss: Bool = true
+    var offsetY: CGFloat = 0.0
+    var onTap: (() -> Void)?
+    var onCompletion: (() -> Void)?
+}
+
+public func alertToast(
+    alertToast: AlertToast,
+    duration: Double = 2,
+    tapToDismiss: Bool = true,
+    offsetY: CGFloat = 0.0,
+    onTap: (() -> Void)? = nil,
+    onCompletion: (() -> Void)? = nil
+) {
+    NotificationCenter.default.post(
+        name: .alertToast,
+        object: AlertToastPayload(
+            alertToast: alertToast,
+            duration: duration,
+            tapToDismiss: tapToDismiss,
+            offsetY: offsetY,
+            onTap: onTap,
+            onCompletion: onCompletion
+        )
+    )
 }

@@ -7,7 +7,7 @@ public enum SwiftyAlertType {
     case print
 }
 
-public struct SwiftyAlertTypes: OptionSet {
+public struct SwiftyAlertTypes: OptionSet, Sendable {
     public var rawValue: Int
     
     public static let alert = SwiftyAlertTypes(rawValue:  1 << 0)
