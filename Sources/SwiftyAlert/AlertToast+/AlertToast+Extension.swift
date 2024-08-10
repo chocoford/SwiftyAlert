@@ -29,7 +29,8 @@ extension AlertToast {
             self = .init(
                 displayMode: displayMode,
                 type: type,
-                title: error.localizedDescription
+                title: "Error",
+                subTitle: error.localizedDescription
             )
         }
     }
