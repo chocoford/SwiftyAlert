@@ -9,7 +9,7 @@
 import SwiftUI
 
 #if canImport(AlertToast)
-import AlertToast
+import AlertToast 
 #else
 public typealias AlertToast = FakeAlertToast
 #endif

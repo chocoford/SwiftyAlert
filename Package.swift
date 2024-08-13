@@ -20,17 +20,22 @@ let package = Package(
             targets: ["SwiftyAlert"]
         ),
     ],
+    dependencies: [
+        .package(url: "https://github.com/elai950/AlertToast.git", branch: "master")
+    ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
             name: "SwiftyAlert",
+            dependencies: ["AlertToast"],
             swiftSettings: [
                 .enableExperimentalFeature("StrictConcurrency")
             ]
         ),
         .testTarget(
             name: "SwiftyAlertTests",
-            dependencies: ["SwiftyAlert"]),
+            dependencies: ["SwiftyAlert"]
+        ),
     ]
 )
