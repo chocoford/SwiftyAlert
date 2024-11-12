@@ -18,10 +18,17 @@ extension AlertToast {
         type: AlertType = AlertType.error(.red)
     ) {
         if let error = error as? LocalizedError {
+            
+            let errorDescription = if error.errorDescription?.isEmpty != false {
+                error.localizedDescription
+            } else {
+                error.errorDescription
+            }
+            
             self = .init(
                 displayMode: displayMode,
                 type: type,
-                title: error.errorDescription,
+                title: errorDescription,
                 subTitle: error.failureReason
             )
 
