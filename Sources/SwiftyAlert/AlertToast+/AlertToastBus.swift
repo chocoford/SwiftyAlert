@@ -28,6 +28,8 @@ private struct AlertToastActionKey: EnvironmentKey {
 }
 
 public struct AlertToastAction: Sendable {
+    var logs: Bool = false
+    
     @Binding var isPresented: Bool
     @Binding var alertToast: AlertToast
     @Binding var duration: Double
@@ -145,6 +147,7 @@ struct AlertToastViewModifier: ViewModifier {
             .onAppear {
                 if alertToastAction == nil {
                     alertToastAction = AlertToastAction(
+                        logs: logs,
                         isPresented: $isPresented,
                         alertToast: $alertToast,
                         duration: $duration,
@@ -157,11 +160,6 @@ struct AlertToastViewModifier: ViewModifier {
             }
             .onReceive(NotificationCenter.default.publisher(for: .alertToast)) { output in
                 guard let payload = output.object as? AlertToastPayload else { return }
-                
-                if logs {
-                    print("[AlertToast]", output)
-                }
-                
                 alertToastAction?(
                     payload.alertToast,
                     duration: payload.duration,
