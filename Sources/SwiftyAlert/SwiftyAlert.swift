@@ -22,9 +22,9 @@ public struct SwiftyAlertTypes: OptionSet, Sendable {
 
 extension View {
     @ViewBuilder
-    public func swiftyAlert(_ types: SwiftyAlertTypes = .all) -> some View {
+    public func swiftyAlert(_ types: SwiftyAlertTypes = .all, logs: Bool = false) -> some View {
         self
             .injectAlertBus(enabled: types.contains(.alert))
-            .injectAlertToastBus(enabled: types.contains(.alertToast))
+            .injectAlertToastBus(enabled: types.contains(.alertToast), logs: logs)
     }
 }

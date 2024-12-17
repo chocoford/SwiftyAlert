@@ -109,6 +109,8 @@ extension EnvironmentValues {
 
 #if canImport(AlertToast)
 struct AlertToastViewModifier: ViewModifier {
+    var logs: Bool = false
+    
     @State private var isPresented: Bool = false
     @State private var alertToast: AlertToast = AlertToast(type: .error(.red))
     @State private var duration: Double = 2
@@ -155,6 +157,11 @@ struct AlertToastViewModifier: ViewModifier {
             }
             .onReceive(NotificationCenter.default.publisher(for: .alertToast)) { output in
                 guard let payload = output.object as? AlertToastPayload else { return }
+                
+                if logs {
+                    print("[AlertToast]", output)
+                }
+                
                 alertToastAction?(
                     payload.alertToast,
                     duration: payload.duration,
@@ -171,10 +178,10 @@ struct AlertToastViewModifier: ViewModifier {
 // 3. Optional convenience view modifier
 extension View {
     @ViewBuilder
-    internal func injectAlertToastBus(enabled flag: Bool = true) -> some View {
+    internal func injectAlertToastBus(enabled flag: Bool = true, logs: Bool = false) -> some View {
 #if canImport(AlertToast)
         if flag {
-            modifier(AlertToastViewModifier())
+            modifier(AlertToastViewModifier(logs: logs))
         } else {
             self
         }
