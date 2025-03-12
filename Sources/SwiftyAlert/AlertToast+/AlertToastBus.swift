@@ -7,6 +7,7 @@
 //  Can not use AlertToast init function like `.init`
 
 import SwiftUI
+import os.log
 
 #if canImport(AlertToast)
 import AlertToast 
@@ -28,6 +29,7 @@ private struct AlertToastActionKey: EnvironmentKey {
 }
 
 public struct AlertToastAction: Sendable {
+    var logger: Logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "SwiftyAlert", category: "AlertToast")
     var logs: Bool = false
     
     @Binding var isPresented: Bool
@@ -88,6 +90,7 @@ public struct AlertToastAction: Sendable {
         onTap: (() -> ())? = nil,
         completion: (() -> ())? = nil
     ) {
+        self.logger.error("\(alert.title ?? "", privacy: .public)")
         withAnimation {
             self.isPresented = true
         }
