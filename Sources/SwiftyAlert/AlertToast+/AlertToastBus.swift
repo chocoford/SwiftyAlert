@@ -79,6 +79,7 @@ public struct AlertToastAction: Sendable {
     }
     
     public func callAsFunction(_ error: Error) {
+        self.logger.error("\(error, privacy: .public)")
         self.callAsFunction(AlertToast(error: error))
     }
     
@@ -90,7 +91,6 @@ public struct AlertToastAction: Sendable {
         onTap: (() -> ())? = nil,
         completion: (() -> ())? = nil
     ) {
-        self.logger.error("\(alert.title ?? "", privacy: .public)")
         withAnimation {
             self.isPresented = true
         }
